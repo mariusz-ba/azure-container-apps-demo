@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\AzureContainerApps.Shared.Observability\AzureContainerApps.Shared.Observability.csproj" />
+  </ItemGroup>
+
 </Project>
