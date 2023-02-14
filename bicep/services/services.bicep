@@ -4,6 +4,7 @@ param environmentCode string
 
 param productsServiceImage string
 param ordersServiceImage string
+param gatewayImage string
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-12-01' existing = {
   name: '${replace(baseName, '-', '')}cr${environmentCode}'
@@ -44,7 +45,7 @@ module productsService '../modules/container-app.bicep' = {
     containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
     containerImage: '${containerRegistry.properties.loginServer}/${productsServiceImage}'
     containerPort: 80
-    isExternalIngress: true
+    isExternalIngress: false
     environmentVars: commonEnvironmentVariables
   }
 }
@@ -60,7 +61,33 @@ module ordersService '../modules/container-app.bicep' = {
     containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
     containerImage: '${containerRegistry.properties.loginServer}/${ordersServiceImage}'
     containerPort: 80
-    isExternalIngress: true
+    isExternalIngress: false
     environmentVars: commonEnvironmentVariables
   }
 }
+
+module gateway '../modules/container-app.bicep' = {
+  name: 'gateway'
+  params: {
+    location: location
+    environmentId: containerAppEnvironment.outputs.id
+    containerAppName: '${baseName}-gateway-${environmentCode}'
+    containerRegistry: containerRegistry.properties.loginServer
+    containerRegistryUsername: containerRegistry.listCredentials().username
+    containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
+    containerImage: '${containerRegistry.properties.loginServer}/${gatewayImage}'
+    containerPort: 80
+    isExternalIngress: true
+    environmentVars: concat([
+      {
+        name: 'ReverseProxy__Clusters__Products__Destinations__Destination1__Address'
+        value: 'https://${productsService.outputs.fqdn}'
+      }
+      {
+        name: 'ReverseProxy__Clusters__Orders__Destinations__Destination1__Address'
+        value: 'https://${ordersService.outputs.fqdn}'
+      }
+    ], commonEnvironmentVariables)
+  }
+}
+

@@ -9,6 +9,7 @@ az deployment group create \
   --template-file bicep/services/services.bicep \
   --parameters bicep/services/services.params.json \
   --parameters productsServiceImage="products:$image_tag" \
-  --parameters ordersServiceImage="orders:$image_tag"
+  --parameters ordersServiceImage="orders:$image_tag" \
+  --parameters gatewayImage="gateway:$image_tag"
 
 echo "Services deployment complete."
