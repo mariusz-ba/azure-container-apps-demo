@@ -5,10 +5,6 @@ param environmentCode string
 param serviceAImage string
 param serviceBImage string
 
-resource serviceBusAuthorizationRule 'Microsoft.ServiceBus/namespaces/AuthorizationRules@2021-11-01' existing = {
-  name: '${baseName}-ns-${environmentCode}/ContainerAppsAccessKey'
-}
-
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-12-01' existing = {
   name: '${replace(baseName, '-', '')}cr${environmentCode}'
 }
@@ -35,10 +31,6 @@ var commonEnvironmentVariables = [
     name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
     value: containerAppEnvironment.outputs.appInsightsConnectionString
   }
-  {
-    name: 'AzureServiceBus__ConnectionString'
-    secretRef: 'service-bus-connection-string'
-  }
 ]
 
 module serviceA '../modules/container-app.bicep' = {
@@ -54,14 +46,6 @@ module serviceA '../modules/container-app.bicep' = {
     containerPort: 80
     isExternalIngress: true
     environmentVars: commonEnvironmentVariables
-    configurationSecrets: {
-      secrets: [
-        {
-          name: 'service-bus-connection-string'
-          value: serviceBusAuthorizationRule.listKeys().primaryConnectionString
-        }
-      ]
-    }
   }
 }
 
@@ -78,13 +62,5 @@ module serviceB '../modules/container-app.bicep' = {
     containerPort: 80
     isExternalIngress: true
     environmentVars: commonEnvironmentVariables
-    configurationSecrets: {
-      secrets: [
-        {
-          name: 'service-bus-connection-string'
-          value: serviceBusAuthorizationRule.listKeys().primaryConnectionString
-        }
-      ]
-    }
   }
 }
