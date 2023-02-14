@@ -2,8 +2,8 @@ param location string = resourceGroup().location
 param baseName string = 'aca-demo'
 param environmentCode string
 
-param serviceAImage string
-param serviceBImage string
+param productsServiceImage string
+param ordersServiceImage string
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-12-01' existing = {
   name: '${replace(baseName, '-', '')}cr${environmentCode}'
@@ -33,32 +33,32 @@ var commonEnvironmentVariables = [
   }
 ]
 
-module serviceA '../modules/container-app.bicep' = {
-  name: 'service-a'
+module productsService '../modules/container-app.bicep' = {
+  name: 'products-service'
   params: {
     location: location
     environmentId: containerAppEnvironment.outputs.id
-    containerAppName: '${baseName}-service-a-${environmentCode}'
+    containerAppName: '${baseName}-products-${environmentCode}'
     containerRegistry: containerRegistry.properties.loginServer
     containerRegistryUsername: containerRegistry.listCredentials().username
     containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
-    containerImage: '${containerRegistry.properties.loginServer}/${serviceAImage}'
+    containerImage: '${containerRegistry.properties.loginServer}/${productsServiceImage}'
     containerPort: 80
     isExternalIngress: true
     environmentVars: commonEnvironmentVariables
   }
 }
 
-module serviceB '../modules/container-app.bicep' = {
-  name: 'service-b'
+module ordersService '../modules/container-app.bicep' = {
+  name: 'orders-service'
   params: {
     location: location
     environmentId: containerAppEnvironment.outputs.id
-    containerAppName: '${baseName}-service-b-${environmentCode}'
+    containerAppName: '${baseName}-orders-${environmentCode}'
     containerRegistry: containerRegistry.properties.loginServer
     containerRegistryUsername: containerRegistry.listCredentials().username
     containerRegistryPassword: containerRegistry.listCredentials().passwords[0].value
-    containerImage: '${containerRegistry.properties.loginServer}/${serviceBImage}'
+    containerImage: '${containerRegistry.properties.loginServer}/${ordersServiceImage}'
     containerPort: 80
     isExternalIngress: true
     environmentVars: commonEnvironmentVariables

@@ -8,7 +8,7 @@ az deployment group create \
   --resource-group azure-container-apps \
   --template-file bicep/services/services.bicep \
   --parameters bicep/services/services.params.json \
-  --parameters serviceAImage="service-a:$image_tag" \
-  --parameters serviceBImage="service-b:$image_tag"
+  --parameters productsServiceImage="products:$image_tag" \
+  --parameters ordersServiceImage="orders:$image_tag"
 
 echo "Services deployment complete."

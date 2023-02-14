@@ -6,6 +6,6 @@ builder.Services.AddObservability(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Service B");
+app.MapGet("/", () => "Products");
 
 app.Run();

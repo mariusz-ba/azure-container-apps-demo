@@ -6,9 +6,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{35
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{02FB9CFA-156B-4125-AB63-B4DD72FF1937}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureContainerApps.ServiceA", "src\Services\AzureContainerApps.ServiceA\AzureContainerApps.ServiceA.csproj", "{01F1E505-C2F3-4756-ABFA-7BAFBBB16E0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureContainerApps.Products", "src\Services\AzureContainerApps.Products\AzureContainerApps.Products.csproj", "{01F1E505-C2F3-4756-ABFA-7BAFBBB16E0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureContainerApps.ServiceB", "src\Services\AzureContainerApps.ServiceB\AzureContainerApps.ServiceB.csproj", "{CBBF97BF-FB84-4FD8-8390-3DA81B9F8449}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureContainerApps.Orders", "src\Services\AzureContainerApps.Orders\AzureContainerApps.Orders.csproj", "{CBBF97BF-FB84-4FD8-8390-3DA81B9F8449}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureContainerApps.Shared.Observability", "src\Shared\AzureContainerApps.Shared.Observability\AzureContainerApps.Shared.Observability.csproj", "{655BACFA-16C7-4F72-9FD4-33AF354947A5}"
 EndProject

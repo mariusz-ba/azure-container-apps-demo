@@ -2,22 +2,22 @@ version: '3'
 name: azure-container-apps
 
 services:
-  service-a:
-    image: azure-container-apps/service-a
+  products:
+    image: azure-container-apps/products
     build:
       context: ../
-      dockerfile: src/Services/AzureContainerApps.ServiceA/Dockerfile
+      dockerfile: src/Services/AzureContainerApps.Products/Dockerfile
     restart: unless-stopped
     ports:
       - '5000:80'
     networks:
       - azure-container-apps
-  
-  service-b:
-    image: azure-container-apps/service-b
+
+  orders:
+    image: azure-container-apps/orders
     build:
       context: ../
-      dockerfile: src/Services/AzureContainerApps.ServiceB/Dockerfile
+      dockerfile: src/Services/AzureContainerApps.Orders/Dockerfile
     restart: unless-stopped
     ports:
       - '5010:80'

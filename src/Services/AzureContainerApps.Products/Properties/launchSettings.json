@@ -1,10 +1,10 @@
 ﻿{
   "profiles": {
-    "AzureContainerApps.ServiceB": {
+    "AzureContainerApps.Products": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:5010",
+      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
