@@ -1,9 +1,10 @@
 param location string
 param baseName string
 param environmentCode string
+param vnetConfiguration object
 
-resource logsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
-  name: '${baseName}-logs-${environmentCode}'
+resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
+  name: '${baseName}-log-${environmentCode}'
   location: location
   properties: any({
     retentionInDays: 30
@@ -17,29 +18,34 @@ resource logsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: '${baseName}-ai-${environmentCode}'
+  name: '${baseName}-appi-${environmentCode}'
   location: location
   kind: 'web'
   properties: {
     Application_Type: 'web'
-    WorkspaceResourceId: logsWorkspace.id
+    WorkspaceResourceId: logWorkspace.id
   }
 }
 
-resource env 'Microsoft.App/managedEnvironments@2022-10-01' = {
-  name: '${baseName}-env-${environmentCode}'
+resource env 'Microsoft.App/managedEnvironments@2023-05-01' = {
+  name: '${baseName}-cae-${environmentCode}'
   location: location
-  sku: {
-    name: 'Consumption'
-  }
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
-        customerId: logsWorkspace.properties.customerId
-        sharedKey: logsWorkspace.listKeys().primarySharedKey
+        customerId: logWorkspace.properties.customerId
+        sharedKey: logWorkspace.listKeys().primarySharedKey
       }
     }
+    infrastructureResourceGroup: '${resourceGroup().name}-infrastructure'
+    vnetConfiguration: vnetConfiguration
+    workloadProfiles: [
+      {
+        name: 'Consumption'
+        workloadProfileType: 'Consumption'
+      }
+    ]
   }
 }
 

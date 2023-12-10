@@ -4,6 +4,9 @@
   "parameters": {
     "environmentCode": {
       "value": "mb"
+    },
+    "vnetEnabled": {
+      "value": true
     }
   }
 }

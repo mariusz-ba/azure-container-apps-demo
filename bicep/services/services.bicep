@@ -6,8 +6,19 @@ param productsServiceImage string
 param ordersServiceImage string
 param gatewayImage string
 
+param vnetEnabled bool
+
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-12-01' existing = {
   name: '${replace(baseName, '-', '')}cr${environmentCode}'
+}
+
+module virtualNetwork '../modules/virtual-network.bicep' = if (vnetEnabled) {
+  name: 'virtual-network'
+  params: {
+    location: location
+    baseName: baseName
+    environmentCode: environmentCode
+  }
 }
 
 module containerAppEnvironment '../modules/container-app-environment.bicep' = {
@@ -16,6 +27,9 @@ module containerAppEnvironment '../modules/container-app-environment.bicep' = {
     location: location
     baseName: baseName
     environmentCode: environmentCode
+    vnetConfiguration: vnetEnabled
+      ? { infrastructureSubnetId: virtualNetwork.outputs.caeSubnetId }
+      : {}
   }
 }
 
